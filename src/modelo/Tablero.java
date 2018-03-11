@@ -3,9 +3,11 @@ package modelo;
 import javax.naming.event.NamespaceChangeListener;
 
 import utiles.Utiles;
+import modelo.Casilla;
 
 public class Tablero implements AccionesTablero {
 	private Casilla[][] casillas;
+
 
 	public Casilla[][] getCasillas() {
 		return casillas;
@@ -22,7 +24,27 @@ public class Tablero implements AccionesTablero {
 			}
 		}
 	}
+	public void desvelarTableroCompleto() {
+		for (int i = 0; i < casillas.length; i++) {
+			for (int j = 0; j < casillas[i].length; j++) {
+				if (casillas[i][j].isVelada()) {
+					casillas[i][j].setVelada(false);
+				}
+			}
+		}
+	}
+	public boolean comprobarFinal() {
+		for (int i = 0; i < casillas.length; i++) {
+			for (int j = 0; j < casillas[i].length; j++) {
+				if (casillas[i][j].isMina()&&!casillas[i][j].isMarcada()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
+	
 	@Override
 	public void calcularMinasAlrededor() {
 		// TODO recorrer el panel donde hay mina y colocar un incremento
@@ -71,16 +93,13 @@ public class Tablero implements AccionesTablero {
 	public boolean colocarMina(int x, int y) {
 		// no se debe acceder directamente a las propiedades de otra clase
 		// casilla[x][y].mina=true;
-
 		return casillas[x][y].colocaMina();
 	}
 
 	public boolean desvelarCasilla(Casilla casilla) {
-		// TODO metodo reecursivo que a partir de un casilla desvelada (hay que
-		// saber
-		// cual es dentro del tablero) develada todas las de alrededor y
-		// sucesivas que tengan
-		// un valor de 0 minas alrededor
+		// TODO metodo reecursivo que a partir de un casilla desvelada (Hay que
+		// saber cual es dentro del tablero) desvelada todas las de alrededor y
+		// sucesivas que tengan un valor de 0 minas alrededor
 		return false;
 	}
 
@@ -88,7 +107,7 @@ public class Tablero implements AccionesTablero {
 	public void desvelarContigua(Coordenada lugar) {
 		// lo que hay que hacer siempre
 		// es velar una casilla
-		setVelada(lugar);
+		  setVelada(lugar);
 		// comprobar si las casillas marcadas alrededor coincide con el
 		// numero de minas alrededor de la casilla
 		if (comprobarMarcadas(lugar)) {
